@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Smart Adaptive Quiz Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="light">
+  <header class="topbar">
+    <div class="logo">SmartQuiz</div>
+    <div class="top-right">
+      <button id="themeToggle" class="btn small">Dark</button>
+      <span id="userInfo"></span>
+      <button id="logoutBtn" class="btn small hidden">Logout</button>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- LOGIN -->
+    <section id="loginSection" class="card">
+      <h2>Login / Signup</h2>
+      <p class="hint">
+        Adaptive difficulty personalizes the quiz experience by adjusting question complexity based on your performance.
+      </p>
+      <div class="form-group">
+        <label>Student ID</label>
+        <input type="text" id="studentId" placeholder="e.g. STU101" />
+      </div>
+      <div class="form-group">
+        <label>Name</label>
+        <input type="text" id="studentName" placeholder="Your name" />
+      </div>
+      <div class="form-group">
+        <label>Role</label>
+        <select id="userRole">
+          <option value="student">Student</option>
+          <option value="admin">Admin</option>
+        </select>
+      </div>
+      <div class="form-group inline">
+        <label>
+          <input type="checkbox" id="rememberMe" />
+          Remember me (auto login)
+        </label>
+      </div>
+      <button id="loginBtn" class="btn primary">Login</button>
+      <p id="loginMsg" class="msg"></p>
+    </section>
+
+    <!-- DASHBOARD -->
+    <section id="dashboardSection" class="hidden">
+
+      <!-- PROFILE -->
+      <section class="card" id="profileCard">
+        <h2>Student Profile</h2>
+        <p><strong>Name:</strong> <span id="profileName"></span></p>
+        <p><strong>ID:</strong> <span id="profileId"></span></p>
+        <p><strong>Role:</strong> <span id="profileRole"></span></p>
+        <p><strong>Last Attempt:</strong> <span id="profileLastAttempt">N/A</span></p>
+        <p><strong>Total Points & Level:</strong> <span id="profilePoints">0</span></p>
+      </section>
+
+      <!-- ADAPTIVE QUIZ START -->
+      <section class="card">
+        <h2>Adaptive Mixed Quiz</h2>
+        <p class="hint">
+          The quiz starts at medium level. Correct answers give harder questions; wrong answers give easier ones.
+        </p>
+        <button id="startAdaptiveBtn" class="btn primary">Start Adaptive Quiz</button>
+      </section>
+
+      <!-- LEADERBOARD + BADGES -->
+      <section class="card">
+        <h2>Leaderboard & Gamification</h2>
+        <p class="hint">
+          Gamification motivates learners through rewards, levels, and badges, increasing engagement and interest.
+        </p>
+        <div class="leaderboard-wrapper">
+          <div>
+            <h3>Top Scores</h3>
+            <ol id="leaderboard"></ol>
+          </div>
+          <div>
+            <h3>Your Badges</h3>
+            <ul id="badgeList" class="badges"></ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ADMIN PANEL -->
+      <section id="adminPanel" class="card hidden">
+        <h2>Admin Panel</h2>
+        <p class="hint">
+          Admin can add questions (topic, difficulty, explanation) to power adaptive difficulty and learning gap analysis.
+        </p>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Question Text</label>
+            <textarea id="adminQuestionText"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Option A</label>
+            <input type="text" id="adminOptA" />
+          </div>
+          <div class="form-group">
+            <label>Option B</label>
+            <input type="text" id="adminOptB" />
+          </div>
+          <div class="form-group">
+            <label>Option C</label>
+            <input type="text" id="adminOptC" />
+          </div>
+          <div class="form-group">
+            <label>Option D</label>
+            <input type="text" id="adminOptD" />
+          </div>
+          <div class="form-group">
+            <label>Correct Option</label>
+            <select id="adminCorrect">
+              <option value="0">A</option>
+              <option value="1">B</option>
+              <option value="2">C</option>
+              <option value="3">D</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Topic</label>
+            <select id="adminTopic">
+              <option value="HTML">HTML</option>
+              <option value="CSS">CSS</option>
+              <option value="JavaScript">JavaScript</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Difficulty</label>
+            <select id="adminDifficulty">
+              <option value="easy">Easy</option>
+              <option value="medium">Medium</option>
+              <option value="hard">Hard</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Explanation</label>
+            <textarea id="adminExplanation"></textarea>
+          </div>
+        </div>
+        <button id="addQuestionBtn" class="btn primary">Add Question</button>
+
+        <h3>Student Scores</h3>
+        <ul id="adminScores"></ul>
+      </section>
+
+    </section>
+
+    <!-- QUIZ -->
+    <section id="quizSection" class="card hidden">
+      <div class="quiz-header">
+        <h2 id="quizTitle">Adaptive Quiz</h2>
+        <div class="timer" id="quizTimer">00:00</div>
+      </div>
+      <p id="questionMeta"></p>
+      <h3 id="questionText"></h3>
+      <ul id="optionsList" class="options"></ul>
+      <div class="quiz-controls">
+        <button id="submitQuizBtn" class="btn primary">End Quiz & Submit</button>
+      </div>
+      <p id="quizMsg" class="msg"></p>
+    </section>
+
+    <!-- RESULT -->
+    <section id="resultSection" class="card hidden">
+      <h2>Quiz Result</h2>
+      <p><strong>Score:</strong> <span id="resultScore"></span></p>
+      <p><strong>Percentage:</strong> <span id="resultPercent"></span></p>
+      <p><strong>Grade:</strong> <span id="resultGrade"></span></p>
+      <p><strong>Correct:</strong> <span id="resultCorrect"></span></p>
+      <p><strong>Wrong:</strong> <span id="resultWrong"></span></p>
+      <p><strong>Time Taken:</strong> <span id="resultTime"></span></p>
+      <p><strong>Points Earned:</strong> <span id="resultPoints"></span></p>
+
+      <h3>Learning Gap Analysis</h3>
+      <p class="hint">
+        Learning gap analysis helps students identify weak topics and encourages targeted improvement.
+      </p>
+      <ul id="gapList"></ul>
+
+      <h3>Question-wise Explanations</h3>
+      <p class="hint">
+        The explanation-based feature ensures conceptual clarity by providing reasoning behind correct answers.
+      </p>
+      <ol id="explanationList"></ol>
+
+      <h3>Certificate</h3>
+      <p class="hint">
+        Certificate is generated only if you pass the quiz, similar to real online certification platforms.
+      </p>
+      <div id="certificate" class="certificate">
+        <h2>Certificate of Completion</h2>
+        <p>This is to certify that</p>
+        <h3 id="certName"></h3>
+        <p>has successfully completed the</p>
+        <h3 id="certQuiz"></h3>
+        <p>with grade <span id="certGrade"></span> on <span id="certDate"></span>.</p>
+        <p>Certificate ID: <span id="certId"></span></p>
+      </div>
+
+      <div class="result-actions">
+        <button id="downloadPdfBtn" class="btn secondary">Download (Text)</button>
+        <button id="printBtn" class="btn secondary">Print</button>
+        <button id="backToDashBtn" class="btn primary">Back to Dashboard</button>
+      </div>
+    </section>
+
+  </main>
+
+  <audio id="selectSound" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
+  <audio id="correctSound" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
+  <audio id="wrongSound" src="https://actions.google.com/sounds/v1/cartoon/boing.ogg"></audio>
+
+  <script src="script.js"></script>
+</body>
+</html>
